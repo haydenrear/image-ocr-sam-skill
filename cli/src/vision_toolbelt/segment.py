@@ -62,7 +62,7 @@ def sam2_hf_masks(image_path: str | Path, regions: list[dict[str, Any]], out_dir
             continue
         rid = r.get("id") or f"r{i+1:03d}"
         try:
-            inputs = processor(img, input_boxes=[[[[float(v) for v in box]]]], return_tensors="pt").to(device)
+            inputs = processor(img, input_boxes=[[[float(v) for v in box]]], return_tensors="pt").to(device)
             with torch.no_grad():
                 outputs = model(**inputs)
             masks = processor.post_process_masks(outputs.pred_masks.cpu(), inputs["original_sizes"].cpu(), inputs["reshaped_input_sizes"].cpu())

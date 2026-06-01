@@ -106,7 +106,11 @@ maybe_install_system_deps
 
 EXTRAS="$(extras_for_profile)"
 if [[ "$FORCE" == "1" || ! -x "$VENV_DIR/bin/python" ]]; then
-  "$UV_BIN" venv --python "$PYTHON_BIN" "$VENV_DIR"
+  VENV_ARGS=(venv --python "$PYTHON_BIN")
+  if [[ "$FORCE" == "1" ]]; then
+    VENV_ARGS+=(--clear)
+  fi
+  "$UV_BIN" "${VENV_ARGS[@]}" "$VENV_DIR"
 fi
 
 # Install the local CLI package with uv. The package remains editable against the

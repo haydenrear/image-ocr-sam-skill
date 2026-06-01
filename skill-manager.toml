@@ -1,0 +1,14 @@
+[skill]
+name = "vision-toolbelt-skill"
+version = "0.1.0"
+description = "Installs a uv-backed vision-toolbelt CLI for OCR, screenshot loading, image understanding, bounding boxes, overlays, and segmentation artifacts."
+
+[[cli_dependencies]]
+spec = "skill-script:vision-toolbelt"
+on_path = "vision-toolbelt"
+
+[cli_dependencies.install.any]
+script = "install-vision-toolbelt.sh"
+binary = "vision-toolbelt"
+# Profiles: minimal, edge, desktop, full. Full installs every optional local engine.
+args = ["--profile", "full", "--install-models"]

@@ -1,0 +1,72 @@
+# Vision Toolbelt model catalog.
+# Profiles are intentionally local-first. The installer downloads model snapshots
+# into SKILL_MANAGER_HOME/cache/vision-toolbelt/models unless overridden.
+
+[defaults]
+profile = "edge"
+cache_env = "VISION_TOOLBELT_MODEL_CACHE"
+
+[profiles.minimal]
+description = "No heavyweight ML deps or model downloads. Metadata, cropping, overlays, box validation, screenshot wrappers."
+python_extras = []
+models = []
+
+[profiles.edge]
+description = "Default local-first bundle: Tesseract wrapper, Florence-2 base, and SAM 2.1 tiny."
+python_extras = ["ocr", "vision"]
+models = ["florence2-base", "sam2-hiera-tiny"]
+
+[profiles.desktop]
+description = "Adds YOLO and classic SAM package hooks for workstation use."
+python_extras = ["ocr", "vision", "yolo", "sam"]
+models = ["florence2-base", "sam2-hiera-tiny", "yolo-nano"]
+
+[profiles.full]
+description = "Installs all optional Python extras. Heavy; intended for dev workstations, not small edge devices."
+python_extras = ["ocr", "vision", "yolo", "sam", "paddle"]
+models = ["florence2-base", "sam2-hiera-tiny", "yolo-nano"]
+
+[models.florence2-base]
+kind = "image-understanding"
+source = "hf"
+repo_id = "microsoft/Florence-2-base"
+engine = "florence2"
+license = "MIT"
+use_for = ["caption", "detailed_caption", "ocr", "object_detection", "phrase_grounding", "region_proposal"]
+edge_notes = "0.23B parameters; CPU-capable but much faster on GPU/Metal/CUDA."
+
+[models.sam2-hiera-tiny]
+kind = "segmentation"
+source = "hf"
+repo_id = "facebook/sam2.1-hiera-tiny"
+engine = "sam2_hf"
+license = "Apache-2.0"
+use_for = ["box_prompted_masks", "point_prompted_masks", "automatic_masks"]
+edge_notes = "39M-parameter tiny SAM2 model. Use only after boxes exist when cost matters."
+
+[models.yolo-nano]
+kind = "object-detection"
+source = "ultralytics"
+model_id = "yolov8n.pt"
+engine = "yolo"
+license = "AGPL-3.0 or commercial terms depending on Ultralytics usage."
+use_for = ["generic_object_detection"]
+edge_notes = "Fast generic detector. Not open-vocabulary; use labels/classes, not arbitrary phrases."
+
+[models.tesseract]
+kind = "ocr"
+source = "system"
+binary = "tesseract"
+engine = "tesseract"
+license = "Apache-2.0"
+use_for = ["ocr", "layout_blocks"]
+edge_notes = "CPU-only and cheap. Requires system package plus language data."
+
+[models.paddleocr]
+kind = "ocr-layout"
+source = "python"
+package = "paddleocr"
+engine = "paddleocr"
+license = "Apache-2.0"
+use_for = ["ocr", "document_layout", "tables"]
+edge_notes = "Better layout/document OCR, heavier than Tesseract."

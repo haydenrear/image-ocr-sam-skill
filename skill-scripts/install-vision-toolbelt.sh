@@ -94,10 +94,10 @@ maybe_install_system_deps() {
 
 extras_for_profile() {
   case "$PROFILE" in
-    minimal) echo "" ;;
-    edge) echo "[ocr,vision]" ;;
-    desktop) echo "[ocr,vision,yolo,sam]" ;;
-    full) echo "[ocr,vision,yolo,sam,paddle]" ;;
+    minimal) echo "[doc]" ;;
+    edge) echo "[doc,ocr,vision]" ;;
+    desktop) echo "[doc,ocr,vision,yolo,sam]" ;;
+    full) echo "[doc,ocr,vision,yolo,sam,paddle]" ;;
   esac
 }
 

@@ -7,24 +7,33 @@ profile = "edge"
 cache_env = "VISION_TOOLBELT_MODEL_CACHE"
 
 [profiles.minimal]
-description = "No heavyweight ML deps or model downloads. Metadata, cropping, overlays, box validation, screenshot wrappers."
-python_extras = []
-models = []
+description = "No heavyweight ML deps or model downloads. Metadata, PDF-to-Markdown, cropping, overlays, box validation, screenshot wrappers."
+python_extras = ["doc"]
+models = ["pymupdf4llm"]
 
 [profiles.edge]
-description = "Default local-first bundle: Tesseract wrapper and Florence-2 base. Segmentation falls back to rectangular masks unless a SAM backend is installed."
-python_extras = ["ocr", "vision"]
-models = ["florence2-base", "sam2-hiera-tiny"]
+description = "Default local-first bundle: PDF-to-Markdown, Tesseract wrapper and Florence-2 base. Segmentation falls back to rectangular masks unless a SAM backend is installed."
+python_extras = ["doc", "ocr", "vision"]
+models = ["pymupdf4llm", "florence2-base", "sam2-hiera-tiny"]
 
 [profiles.desktop]
 description = "Adds YOLO and classic SAM package hooks for workstation use."
-python_extras = ["ocr", "vision", "yolo", "sam"]
-models = ["florence2-base", "sam2-hiera-tiny", "ultralytics-sam2-tiny", "yolo-nano"]
+python_extras = ["doc", "ocr", "vision", "yolo", "sam"]
+models = ["pymupdf4llm", "florence2-base", "sam2-hiera-tiny", "ultralytics-sam2-tiny", "yolo-nano"]
 
 [profiles.full]
 description = "Installs all optional Python extras including Ultralytics SAM2. Heavy; intended for dev workstations, not small edge devices."
-python_extras = ["ocr", "vision", "yolo", "sam", "paddle"]
-models = ["florence2-base", "sam2-hiera-tiny", "ultralytics-sam2-tiny", "yolo-nano"]
+python_extras = ["doc", "ocr", "vision", "yolo", "sam", "paddle"]
+models = ["pymupdf4llm", "florence2-base", "sam2-hiera-tiny", "ultralytics-sam2-tiny", "yolo-nano"]
+
+[models.pymupdf4llm]
+kind = "document-markdown"
+source = "python"
+package = "pymupdf4llm"
+engine = "pymupdf4llm"
+license = "AGPL-3.0 or commercial terms depending on PyMuPDF usage."
+use_for = ["pdf_to_markdown", "document_chunks", "pdf_images"]
+edge_notes = "Local MuPDF-backed PDF extraction. No GPU or model checkpoint required."
 
 [models.florence2-base]
 kind = "image-understanding"

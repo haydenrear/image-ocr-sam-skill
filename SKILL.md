@@ -1,11 +1,11 @@
 ---
 name: vision-toolbelt
-description: Use when an agent needs OCR, screenshots, image captioning/understanding, bounding boxes, segmentation masks, or standardized image analysis artifacts across Claude Code, Codex, Gemini, or text-only models.
+description: Use when an agent needs OCR, screenshots, image captioning/understanding, PDF-to-Markdown extraction, bounding boxes, segmentation masks, or standardized image/document analysis artifacts across Claude Code, Codex, Gemini, or text-only models.
 ---
 
 # Vision Toolbelt Skill
 
-Use this skill whenever you need to inspect an image, screenshot, UI, photo, repair image, support-thread image, document image, or any task requiring OCR, image understanding, bounding boxes, regions, crops, overlays, or masks.
+Use this skill whenever you need to inspect an image, screenshot, UI, photo, repair image, support-thread image, document image, PDF, or any task requiring OCR, image understanding, PDF-to-Markdown extraction, bounding boxes, regions, crops, overlays, or masks.
 
 ## Core rule
 
@@ -57,6 +57,14 @@ vision-toolbelt overlay path/to/image.png \
 
 5. For non-multimodal models, pass the JSON summary, OCR blocks, region descriptions, bounding boxes, and overlay path instead of the original image.
 
+6. For PDFs, extract Markdown before asking a model to reason over the document:
+
+```bash
+vision-toolbelt pdf-markdown report.pdf \
+  --out artifacts/report.md \
+  --meta-out artifacts/report.document.json
+```
+
 ## CLI discovery
 
 The CLI is self-documenting. Use:
@@ -67,6 +75,7 @@ vision-toolbelt analyze --help
 vision-toolbelt toolspec --format json
 vision-toolbelt schema --format json
 vision-toolbelt models list --format table
+vision-toolbelt pdf-markdown --help
 ```
 
 Every command that creates an artifact accepts `--out` or `--out-dir`. Prefer explicit output paths so Claude Code, Codex, Gemini, and text-only models all consume the same artifact layout.
@@ -98,6 +107,7 @@ Recommended low-cost bundle:
 - OCR: Tesseract when available; Florence-2 OCR as an optional model-backed fallback.
 - Image understanding: Florence-2 base for local captioning, OCR, object detection, and phrase grounding.
 - Segmentation: SAM 2.1 Hiera Tiny for box-prompted masks, or rectangular mask fallback when SAM is unavailable.
+- PDF extraction: PyMuPDF4LLM for local PDF-to-Markdown conversion, with optional image extraction and OCR language hints for scanned pages.
 
 ## Agent-specific guidance
 

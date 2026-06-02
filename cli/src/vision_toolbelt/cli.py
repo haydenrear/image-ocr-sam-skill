@@ -15,6 +15,7 @@ from .detect import run_detect
 from .segment import run_segment
 from .overlay import render_overlay
 from .screenshot import take_screenshot
+from .document import pdf_to_markdown
 from .model_catalog import load_catalog, catalog_table, install_models
 from .toolspec import TOOL_SPEC
 
@@ -213,6 +214,41 @@ def screenshot(
         write_json(target, data)
         result["analysis_path"] = str(target.expanduser().resolve())
     console.print_json(json.dumps(result))
+
+
+@app.command("pdf-markdown")
+def pdf_markdown(
+    pdf: Path = typer.Argument(..., exists=True, readable=True, help="PDF path to convert."),
+    out: Path = typer.Option(..., "--out", help="Markdown output path."),
+    meta_out: Optional[Path] = typer.Option(None, "--meta-out", help="Optional JSON metadata sidecar path."),
+    pages: Optional[str] = typer.Option(None, "--pages", help="Comma-separated zero-based pages, for example 0,1,5."),
+    write_images: bool = typer.Option(False, "--write-images", help="Extract referenced images and include image links in Markdown."),
+    image_dir: Optional[Path] = typer.Option(None, "--image-dir", help="Directory for extracted images when --write-images is set."),
+    image_format: str = typer.Option("png", "--image-format", help="Image format for extracted images."),
+    dpi: int = typer.Option(150, "--dpi", help="DPI for rendered/extracted images."),
+    page_chunks: bool = typer.Option(False, "--page-chunks", help="Request page-chunk extraction before joining Markdown."),
+    ocr_language: Optional[str] = typer.Option(None, "--ocr-language", help="Optional OCR language string for scanned pages, such as eng."),
+):
+    """Convert a PDF to Markdown for agent/RAG handoff."""
+    page_list = None
+    if pages:
+        try:
+            page_list = [int(p.strip()) for p in pages.split(",") if p.strip()]
+        except ValueError as e:
+            raise typer.BadParameter("--pages must be comma-separated zero-based integers") from e
+    data = pdf_to_markdown(
+        pdf,
+        out,
+        pages=page_list,
+        write_images=write_images,
+        image_dir=image_dir,
+        image_format=image_format,
+        dpi=dpi,
+        page_chunks=page_chunks,
+        ocr_language=ocr_language,
+        meta_out=meta_out,
+    )
+    _print_or_write(data, None)
 
 
 @app.command()

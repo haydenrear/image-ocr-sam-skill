@@ -7,6 +7,7 @@ Examples:
 ```bash
 vision-toolbelt inspect image.png --out image.inspect.json
 vision-toolbelt analyze image.png --prompt "loose connector, corrosion" --out image.analysis.json --overlay-out image.overlay.png
+vision-toolbelt pdf-markdown report.pdf --out report.md --meta-out report.document.json
 vision-toolbelt toolspec --format json
 vision-toolbelt models list
 ```

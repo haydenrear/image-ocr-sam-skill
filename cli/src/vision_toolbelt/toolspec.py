@@ -64,6 +64,13 @@ TOOL_SPEC = {
             "important_options": ["--analyze", "--analysis-out"],
             "output": "Screenshot path and optional analysis JSON.",
         },
+        {
+            "name": "pdf-markdown",
+            "purpose": "Convert a PDF into Markdown for agent, RAG, or text-only model handoff.",
+            "required_args": ["pdf", "--out"],
+            "important_options": ["--meta-out", "--pages", "--write-images", "--image-dir", "--ocr-language"],
+            "output": "Markdown file plus optional vision-toolbelt.document.v1 JSON sidecar.",
+        },
     ],
     "agent_rules": [
         "Do not invent precise coordinates; run detect/analyze.",

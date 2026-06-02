@@ -98,7 +98,7 @@ def detect(
 def segment(
     image: Path = typer.Argument(..., exists=True, readable=True, help="Image path to segment."),
     boxes: Path = typer.Option(..., "--boxes", exists=True, readable=True, help="JSON from detect/analyze containing regions[]. Required."),
-    engine: str = typer.Option("auto", "--engine", help="Segmentation engine: auto, sam2_hf, box, none."),
+    engine: str = typer.Option("auto", "--engine", help="Segmentation engine: auto, sam2_ultralytics, sam2_hf, box, none."),
     out_dir: Path = typer.Option(Path("masks"), "--out-dir", help="Directory for mask PNG files."),
     model_id: Optional[str] = typer.Option(None, "--model-id", help="Override segmentation model id."),
     device: str = typer.Option("auto", "--device", help="Device: auto, cpu, cuda, cuda:0."),
@@ -121,7 +121,7 @@ def analyze(
     ocr_engine: str = typer.Option("auto", "--ocr-engine", help="OCR engine: auto, tesseract, paddleocr, none."),
     caption_engine: str = typer.Option("auto", "--caption-engine", help="Caption engine: auto, basic, florence2, none."),
     detect_engine: str = typer.Option("auto", "--detect-engine", help="Detection engine: auto, florence2, grounding-dino, yolo, none."),
-    segment_engine: str = typer.Option("none", "--segment-engine", help="Segmentation engine: none, auto, sam2_hf, box. Use none unless masks are needed."),
+    segment_engine: str = typer.Option("none", "--segment-engine", help="Segmentation engine: none, auto, sam2_ultralytics, sam2_hf, box. Use none unless masks are needed."),
     lang: str = typer.Option("eng", "--lang", help="OCR language."),
     conf: float = typer.Option(0.25, "--conf", help="Detection confidence/threshold."),
     model_id: Optional[str] = typer.Option(None, "--model-id", help="Optional shared model override for selected image understanding engine."),

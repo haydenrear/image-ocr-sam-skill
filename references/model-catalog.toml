@@ -12,19 +12,19 @@ python_extras = []
 models = []
 
 [profiles.edge]
-description = "Default local-first bundle: Tesseract wrapper, Florence-2 base, and SAM 2.1 tiny."
+description = "Default local-first bundle: Tesseract wrapper and Florence-2 base. Segmentation falls back to rectangular masks unless a SAM backend is installed."
 python_extras = ["ocr", "vision"]
 models = ["florence2-base", "sam2-hiera-tiny"]
 
 [profiles.desktop]
 description = "Adds YOLO and classic SAM package hooks for workstation use."
 python_extras = ["ocr", "vision", "yolo", "sam"]
-models = ["florence2-base", "sam2-hiera-tiny", "yolo-nano"]
+models = ["florence2-base", "sam2-hiera-tiny", "ultralytics-sam2-tiny", "yolo-nano"]
 
 [profiles.full]
-description = "Installs all optional Python extras. Heavy; intended for dev workstations, not small edge devices."
+description = "Installs all optional Python extras including Ultralytics SAM2. Heavy; intended for dev workstations, not small edge devices."
 python_extras = ["ocr", "vision", "yolo", "sam", "paddle"]
-models = ["florence2-base", "sam2-hiera-tiny", "yolo-nano"]
+models = ["florence2-base", "sam2-hiera-tiny", "ultralytics-sam2-tiny", "yolo-nano"]
 
 [models.florence2-base]
 kind = "image-understanding"
@@ -42,7 +42,16 @@ repo_id = "facebook/sam2.1-hiera-tiny"
 engine = "sam2_hf"
 license = "Apache-2.0"
 use_for = ["box_prompted_masks", "point_prompted_masks", "automatic_masks"]
-edge_notes = "39M-parameter tiny SAM2 model. Use only after boxes exist when cost matters."
+edge_notes = "39M-parameter tiny SAM2 model for Transformers releases with Sam2Model support. Full installs prefer Ultralytics SAM2 for box-prompted masks."
+
+[models.ultralytics-sam2-tiny]
+kind = "segmentation"
+source = "ultralytics"
+model_id = "sam2_t.pt"
+engine = "sam2_ultralytics"
+license = "AGPL-3.0 or commercial terms depending on Ultralytics usage."
+use_for = ["box_prompted_masks"]
+edge_notes = "Used by the full profile's SAM2 backend. The checkpoint is resolved by Ultralytics at runtime."
 
 [models.yolo-nano]
 kind = "object-detection"

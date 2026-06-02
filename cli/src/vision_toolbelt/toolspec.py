@@ -35,7 +35,7 @@ TOOL_SPEC = {
             "name": "segment",
             "purpose": "Produce masks from existing boxes. Use after detect or with a user-supplied boxes JSON.",
             "required_args": ["image", "--boxes"],
-            "important_options": ["--engine auto|sam2_hf|box", "--out-dir", "--out"],
+            "important_options": ["--engine auto|sam2_ultralytics|sam2_hf|box", "--out-dir", "--out"],
             "output": "Analysis-style JSON with regions[].mask_path.",
         },
         {
